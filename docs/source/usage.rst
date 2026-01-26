@@ -6,29 +6,31 @@ Usage
 Installation
 ------------
 
-To use Lumache, first install it using pip:
+To use LineMut, first clone the public code repository:
 
 .. code-block:: console
 
-   (.venv) $ pip install lumache
+   $ git clone https://gitee.com/sunfengjie/linemut.git
 
-Creating recipes
-----------------
+Create a conda environment that contains the dependencies
+required to run LineMut.
 
-To retrieve a list of random ingredients,
-you can use the ``lumache.get_random_ingredients()`` function:
+.. code-block:: console
 
-.. autofunction:: lumache.get_random_ingredients
+   $ cd linemut/
+   $ conda create -n linemut -f ./conda_env.txt 
 
-The ``kind`` parameter should be either ``"meat"``, ``"fish"``,
-or ``"veggies"``. Otherwise, :py:func:`lumache.get_random_ingredients`
-will raise an exception.
+LineMut also depends on GATK, so please ensure that GATK is 
+already installed. You can verify the installation using the 
+following command:
 
-.. autoexception:: lumache.InvalidKindError
+.. code-block:: console
 
-For example:
+   $ gatk --version 
 
->>> import lumache
->>> lumache.get_random_ingredients()
-['shells', 'gorgonzola', 'parsley']
+Add the cloned local directory to the PATH (optional):
 
+.. code-block:: console
+
+   $ echo PATH=$(pwd):'${PATH}' >> ~/.bashrc 
+   $ source ~/.bashrc
