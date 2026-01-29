@@ -1,5 +1,12 @@
-Welcome to LineMut's documentation!
+Welcome to LineMut's documentation! |Hi| 
+
 ===================================
+
+.. |hi| image:: ./figures/Hi.gif
+   :height: 30px
+   :alt: hi
+
+.. image:: ./figures/main_flow.png
 
 **LineMut** is an open-source pipeline for high resolution and stable SNV detection and 
 accurate lineage construction.
