@@ -74,8 +74,8 @@ Below is the full help message provided by ``linemut_call``:
            Print this message, exit and return a non-zero exit status.
 
 
-Running LineMut via a Bash Script
----------------------------------
+Running LineMut Call via a Bash Script
+--------------------------------------
 
 To run LineMut, specify all required parameters and optionally include additional
 arguments depending on your analysis needs. It is recommended to write the command
@@ -85,20 +85,19 @@ An example script is shown below:
 
 .. code-block:: bash
 
-   inemut='/jdfsbjcas1/ST_BJ/P21Z28400N0234/sunfengjie/Projects/LineMut/linemut_rerun_generate_h5ad/linemut_call'
+   raw_bam='/path/to/bam'
+   ref='/path/to/genome/fasta'
+   output='/path/to/result/'
+   barcode_celltype_mapping='/path/to/barcode/celltype/map/file'
+   cells_coor='/path/to/cells/coordinate/file'
+   k=kmer-length
 
-   raw_bam='/jdfsbjcas1/ST_BJ/P21Z28400N0234/sunfengjie/Projects/LineMut/data/tomato/bam/callus_CNS0818518_10x/outs/possorted_genome_bam.bam'
-   ref='/jdfsbjcas1/ST_BJ/P21Z28400N0234/sunfengjie/Projects/LineMut/refgenome/tomato_spaceranger/fasta/genome.fa'
-   output='/jdfsbjcas1/ST_BJ/P21Z28400N0234/sunfengjie/Projects/LineMut/data/tomato/linemut_results/10x_cmb'
-   barcode_celltype_mapping='/jdfsbjcas1/ST_BJ/P21Z28400N0234/sunfengjie/Projects/LineMut/data/tomato/10x_cells_celltype.csv'
-   cells_coor='/jdfsbjcas1/ST_BJ/P21Z28400N0234/sunfengjie/Projects/LineMut/data/tomato/10x_cells_coor.csv'
-
-   /usr/bin/time -v $linemut \
+   linemut_call \
        -I $raw_bam -O $output -m $barcode_celltype_mapping \
-       -c $cells_coor -R $ref -k 27 \
-       --python /jdfsbjcas1/ST_BJ/P21Z28400N0234/sunfengjie/Tools/miniconda3/envs/multi-gatk/bin/python \
-       --gatk /jdfsbjcas1/ST_BJ/PUB/User/sunfengjie/gatk-4.4.0.0/gatk \
-       --samtools /jdfsbjcas1/ST_BJ/P21Z28400N0234/sunfengjie/Tools/miniconda3/envs/general-tools/bin/samtools
+       -c $cells_coor -R $ref -k $k \
+       --python /path/to/python \
+       --gatk /python/to/gatk \
+       --samtools /path/to/samtools
 
 
 Parameter Notes
@@ -124,15 +123,15 @@ printed to the console:
 
 .. code-block:: text
 
-   2026-01-08 17:24:05 INFO: [linemut_call] bam=/jdfsbjcas1/ST_BJ/P21Z28400N0234/sunfengjie/Projects/LineMut/data/tomato/bam/callus_CNS0818518_10x/outs/possorted_genome_bam.bam
-   2026-01-08 17:24:05 INFO: [linemut_call] output=/jdfsbjcas1/ST_BJ/P21Z28400N0234/sunfengjie/Projects/LineMut/data/tomato/linemut_results/10x_cmb
-   2026-01-08 17:24:05 INFO: [linemut_call] barcode-celltype-mapping=/jdfsbjcas1/ST_BJ/P21Z28400N0234/sunfengjie/Projects/LineMut/data/tomato/10x_cells_celltype.csv
-   2026-01-08 17:24:06 INFO: [linemut_call] cells-coordinate=/jdfsbjcas1/ST_BJ/P21Z28400N0234/sunfengjie/Projects/LineMut/data/tomato/10x_cells_coor.csv
-   2026-01-08 17:24:06 INFO: [linemut_call] ref=/jdfsbjcas1/ST_BJ/P21Z28400N0234/sunfengjie/Projects/LineMut/refgenome/tomato_spaceranger/fasta/genome.fa
-   2026-01-08 17:24:06 INFO: [linemut_call] k-mer=27
-   2026-01-08 17:24:06 INFO: [linemut_call] python=/jdfsbjcas1/ST_BJ/P21Z28400N0234/sunfengjie/Tools/miniconda3/envs/multi-gatk/bin/python
-   2026-01-08 17:24:06 INFO: [linemut_call] gatk=/jdfsbjcas1/ST_BJ/PUB/User/sunfengjie/gatk-4.4.0.0/gatk
-   2026-01-08 17:24:06 INFO: [linemut_call] samtools=/jdfsbjcas1/ST_BJ/P21Z28400N0234/sunfengjie/Tools/miniconda3/envs/general-tools/bin/samtools
+   2026-01-08 17:24:05 INFO: [linemut_call] bam=/path/to/bam
+   2026-01-08 17:24:05 INFO: [linemut_call] output=/path/to/store/result/files
+   2026-01-08 17:24:05 INFO: [linemut_call] barcode-celltype-mapping=/path/to/barcode/celltype/map/file
+   2026-01-08 17:24:06 INFO: [linemut_call] cells-coordinate=/path/to/cells/coordinate/file
+   2026-01-08 17:24:06 INFO: [linemut_call] ref=/path/to/genome/fasta
+   2026-01-08 17:24:06 INFO: [linemut_call] k-mer=kmer-length
+   2026-01-08 17:24:06 INFO: [linemut_call] python=/path/to/python
+   2026-01-08 17:24:06 INFO: [linemut_call] gatk=/path/to/gatk
+   2026-01-08 17:24:06 INFO: [linemut_call] samtools=/path/to/samtools
    2026-01-08 17:24:06 INFO: [linemut_call] Step 1: bam filtering and cell type-based demultiplexing
    ...
    2026-01-08 19:24:43 INFO: [linemut_call] Step 8: finished
@@ -146,47 +145,84 @@ structure similar to the following:
 
 .. code-block:: text
 
-   10x_cmb/
-   ├── 1.celltype_bams
-   │   ├── Epidermis.bam
-   │   ├── Epidermis.bam.bai
-   │   ├── Inner_callus.bam
-   │   ├── Inner_callus.bam.bai
-   │   ├── Outgrowth_shoot.bam
-   │   ├── Outgrowth_shoot.bam.bai
-   │   ├── Shoot_primordia.bam
-   │   ├── Shoot_primordia.bam.bai
-   │   ├── Vascular_tissue.bam
-   │   └── Vascular_tissue.bam.bai
-   ├── 2.cellmetabin_result
-   │   ├── 27mer_cmbs
-   │   └── cmb_bams
-   ├── 3.freebayes_vcfs
-   │   ├── Epidermis_cmb_0.vcf
-   │   ├── Epidermis_cmb_1.vcf
-   │   ├── Epidermis_cmb_2.vcf
-   │   ├── Epidermis_cmb_3.vcf
-   │   ├── Inner_callus_cmb_0.vcf
-   │   ├── Inner_callus_cmb_1.vcf
-   │   ├── Inner_callus_cmb_2.vcf
-   │   ├── Inner_callus_cmb_3.vcf
-   │   ├── Outgrowth_shoot_cmb_0.vcf
-   │   ├── Outgrowth_shoot_cmb_1.vcf
-   │   ├── Outgrowth_shoot_cmb_2.vcf
-   │   ├── Outgrowth_shoot_cmb_3.vcf
-   │   ├── Outgrowth_shoot_cmb_4.vcf
-   │   ├── Shoot_primordia_cmb_0.vcf
-   │   ├── Shoot_primordia_cmb_1.vcf
-   │   ├── Shoot_primordia_cmb_2.vcf
-   │   ├── Shoot_primordia_cmb_3.vcf
-   │   ├── Shoot_primordia_cmb_4.vcf
-   │   ├── Shoot_primordia_cmb_5.vcf
-   │   ├── Vascular_tissue_cmb_0.vcf
-   │   ├── Vascular_tissue_cmb_1.vcf
-   │   ├── Vascular_tissue_cmb_2.vcf
-   │   └── Vascular_tissue_cmb_3.vcf
-   ├── 4.strelka_vcfs
-   ├── 5.integrated_vars
-   ├── 6.gatk_result
-   ├── 7.categorized_vars
-   └── 8.h5ad_files
+    /path/to/result/
+    ├── 1.celltype_bams10x_cmb/
+    ├── 1.celltype_bams
+    │   ├── Epidermis.bam
+    │   ├── Epidermis.bam.bai
+    │   ├── Inner_callus.bam
+    │   ├── Inner_callus.bam.bai
+    │   ├── Outgrowth_shoot.bam
+    │   ├── Outgrowth_shoot.bam.bai
+    │   ├── Shoot_primordia.bam
+    │   ├── Shoot_primordia.bam.bai
+    │   ├── Vascular_tissue.bam
+    │   └── Vascular_tissue.bam.bai
+    ├── 2.cellmetabin_result
+    │   ├── 27mer_cmbs
+    │   └── cmb_bams
+    ├── 3.freebayes_vcfs
+    │   ├── Epidermis_cmb_0.vcf
+    │   ├── Epidermis_cmb_1.vcf
+    │   ├── Epidermis_cmb_2.vcf
+    │   ├── Epidermis_cmb_3.vcf
+    │   ├── Inner_callus_cmb_0.vcf
+    │   ├── Inner_callus_cmb_1.vcf
+    │   ├── Inner_callus_cmb_2.vcf
+    │   ├── Inner_callus_cmb_3.vcf
+    │   ├── Outgrowth_shoot_cmb_0.vcf
+    │   ├── Outgrowth_shoot_cmb_1.vcf
+    │   ├── Outgrowth_shoot_cmb_2.vcf
+    │   ├── Outgrowth_shoot_cmb_3.vcf
+    │   ├── Outgrowth_shoot_cmb_4.vcf
+    │   ├── Shoot_primordia_cmb_0.vcf
+    │   ├── Shoot_primordia_cmb_1.vcf
+    │   ├── Shoot_primordia_cmb_2.vcf
+    │   ├── Shoot_primordia_cmb_3.vcf
+    │   ├── Shoot_primordia_cmb_4.vcf
+    │   ├── Shoot_primordia_cmb_5.vcf
+    │   ├── Vascular_tissue_cmb_0.vcf
+    │   ├── Vascular_tissue_cmb_1.vcf
+    │   ├── Vascular_tissue_cmb_2.vcf
+    │   └── Vascular_tissue_cmb_3.vcf
+    ├── 4.strelka_vcfs
+    │   ├── Epidermis_cmb_0
+    │   ├── Epidermis_cmb_1
+    │   ├── Epidermis_cmb_2
+    │   ├── Epidermis_cmb_3
+    │   ├── Inner_callus_cmb_0
+    │   ├── Inner_callus_cmb_1
+    │   ├── Inner_callus_cmb_2
+    │   ├── Inner_callus_cmb_3
+    │   ├── Outgrowth_shoot_cmb_0
+    │   ├── Outgrowth_shoot_cmb_1
+    │   ├── Outgrowth_shoot_cmb_2
+    │   ├── Outgrowth_shoot_cmb_3
+    │   ├── Outgrowth_shoot_cmb_4
+    │   ├── Shoot_primordia_cmb_0
+    │   ├── Shoot_primordia_cmb_1
+    │   ├── Shoot_primordia_cmb_2
+    │   ├── Shoot_primordia_cmb_3
+    │   ├── Shoot_primordia_cmb_4
+    │   ├── Shoot_primordia_cmb_5
+    │   ├── Vascular_tissue_cmb_0
+    │   ├── Vascular_tissue_cmb_1
+    │   ├── Vascular_tissue_cmb_2
+    │   └── Vascular_tissue_cmb_3
+    ├── 5.integrated_vars
+    │   ├── trusted
+    │   └── untrusted
+    ├── 6.gatk_result
+    │   ├── bqsr
+    │   ├── filtered_vcfs
+    │   ├── logs
+    │   ├── raw_vcfs
+    │   └── split_ncigar_bams
+    ├── 7.categorized_vars
+    │   ├── trusted
+    │   └── untrusted
+    └── 8.h5ad_files
+        ├── sc_depth.h5ad
+        ├── sc_ratio.h5ad
+        ├── unit_depth.h5ad
+        └── unit_ratio.h5ad
