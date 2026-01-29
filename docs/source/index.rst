@@ -1,18 +1,14 @@
-Welcome to LineMut's documentation! |Hi| 
-
+Welcome to LineMut's tutorial!
 ===================================
-
-.. |hi| image:: ./figures/Hi.gif
-   :height: 30px
-   :alt: hi
 
 .. image:: ./figures/main_flow.png
 
 **LineMut** is an open-source pipeline for high resolution and stable SNV detection and 
 accurate lineage construction.
 
-Check out the :doc:`usage` section for further information, including
-how to :ref:`installation` the project.
+Please refer to the LineMut github page_ for information on installation and basic usage.
+
+.. _page: https://github.com/Topigs/linemut
 
 .. note::
 
@@ -23,4 +19,4 @@ Contents
 
 .. toctree::
 
-   usage
+   tutorial
