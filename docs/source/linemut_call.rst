@@ -1,10 +1,7 @@
-Tutorial
-========
+LineMut Call
+============
 
 .. _tutorial:
-
-linemut call
-------------
 
 Check Installation
 ------------------

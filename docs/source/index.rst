@@ -19,4 +19,4 @@ Contents
 
 .. toctree::
 
-   tutorial
+   linemut_call
